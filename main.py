@@ -12,6 +12,7 @@ keyboard = Controller()
 
 time_running = 60
 wpm = 40
+accuracy = 100
 
 def imgToString(bbox):
   
@@ -47,6 +48,24 @@ def hasTextChanged(text,area):
         return True
 
 print('\n'*50)
+print("Hello there! You wanna use this Typewriter? Perfect! Answer those questions for me please:")
+print("")
+print("How long does the test run?")
+while(True):
+    try:
+        time_running = int(input())
+        break
+    except ValueError:
+        print("That's not a real number!")
+print("")
+print("How many WPS you wanna achieve?")
+while(True):
+    try:
+        wpm = int(input())
+        break
+    except ValueError:
+        print("That's not a real number!")
+
 area = getArea()
 
 print("start in 5")
