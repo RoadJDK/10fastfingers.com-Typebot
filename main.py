@@ -10,15 +10,18 @@ from PIL import ImageGrab
 
 keyboard = Controller()
 
+time_running = 60
+wpm = 40
+
 def imgToString(bbox):
   
-    pytesseract.pytesseract.tesseract_cmd ='C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
     
     cap = ImageGrab.grab(bbox)
   
     tesstr = pytesseract.image_to_string(
             cv2.cvtColor(nm.array(cap), cv2.COLOR_BGR2GRAY), 
-            lang ='dan')
+            lang ='eng')
     return tesstr
 
 def getArea():
@@ -59,14 +62,40 @@ time.sleep(1)
 
 text = imgToString(area)
 
-while(True):
+t_end = time.time() + 60 * 60
+delay = time_running / wpm
+
+while time.time() < t_end:
     if (hasTextChanged(text,area) == True):
         text = imgToString(area)
     else:
         for c in text:
             if (c == " "):
                 pyautogui.hotkey('space')
+                time.sleep(delay)
             else:
                 keyboard.press(c)
-                time.sleep(0.01)
+                time.sleep(0.00005)
         pyautogui.hotkey('space')
+
+'''
+# TODO anticheat
+words = 0
+
+if (hasTextChanged(text,area) == True):
+        text = imgToString(area)
+else:
+    for c in text:
+        newline = False
+        if (words % 11 == 0 and words != 0):
+            pyautogui.hotkey('enter')
+            newline = True
+            words = 0
+        if (c == " "):
+            if (newline == False):
+                words += 1
+            pyautogui.hotkey('space')
+        else:
+            keyboard.press(c)
+    pyautogui.hotkey('space')
+'''
