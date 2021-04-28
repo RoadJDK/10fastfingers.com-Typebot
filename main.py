@@ -3,16 +3,20 @@ import pyautogui
 import pytesseract
 import time
 import cv2
+import concurrent.futures
 
 from pynput.keyboard import Key, Controller
+from threading import Thread
 from PIL import ImageGrab
 
 
 keyboard = Controller()
 
 time_running = 60
-wpm = 40
+wpm = 70
 accuracy = 100
+language = 'deu'
+
 
 def imgToString(bbox):
   
@@ -22,7 +26,7 @@ def imgToString(bbox):
   
     tesstr = pytesseract.image_to_string(
             cv2.cvtColor(nm.array(cap), cv2.COLOR_BGR2GRAY), 
-            lang ='eng')
+            lang =language)
     return tesstr
 
 def getArea():
@@ -49,7 +53,7 @@ def hasTextChanged(text,area):
 
 print('\n'*50)
 print("Hello there! You wanna use this Typewriter? Perfect! Answer those questions for me please:")
-print("")
+print()
 print("How long does the test run?")
 while(True):
     try:
@@ -57,7 +61,7 @@ while(True):
         break
     except ValueError:
         print("That's not a real number!")
-print("")
+print()
 print("How many WPS you wanna achieve?")
 while(True):
     try:
@@ -65,8 +69,10 @@ while(True):
         break
     except ValueError:
         print("That's not a real number!")
+print()
 
-area = getArea()
+area = getArea(1)
+print()
 
 print("start in 5")
 time.sleep(1)
@@ -82,7 +88,7 @@ time.sleep(1)
 text = imgToString(area)
 
 t_end = time.time() + 60 * 60
-delay = time_running / wpm
+delay = (time_running / wpm) - 0.0001
 
 while time.time() < t_end:
     if (hasTextChanged(text,area) == True):
