@@ -10,20 +10,15 @@ from PIL import ImageGrab
 
 keyboard = Controller()
 
-def imToString(bbox):
+def imgToString(bbox):
   
-    # Path of tesseract executable
     pytesseract.pytesseract.tesseract_cmd ='C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
     
-    # ImageGrab-To capture the screen image in a loop. 
-    # Bbox used to capture a specific area.
     cap = ImageGrab.grab(bbox)
   
-    # Converted the image to monochrome for it to be easily 
-    # read by the OCR and obtained the output String.
     tesstr = pytesseract.image_to_string(
             cv2.cvtColor(nm.array(cap), cv2.COLOR_BGR2GRAY), 
-            lang ='deu')
+            lang ='dan')
     return tesstr
 
 def getArea():
@@ -42,7 +37,7 @@ def getArea():
     return (x1.x,y1.y,x2.x,y2.y)
 
 def hasTextChanged(text,area):
-    checkText = imToString(area)
+    checkText = imgToString(area)
     if (text == checkText):
         return False
     else:
@@ -62,11 +57,11 @@ time.sleep(1)
 print("start in 1")
 time.sleep(1)
 
-text = imToString(area)
+text = imgToString(area)
 
 while(True):
     if (hasTextChanged(text,area) == True):
-        text = imToString(area)
+        text = imgToString(area)
     else:
         for c in text:
             if (c == " "):
